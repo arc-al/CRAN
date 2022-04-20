@@ -1,0 +1,87 @@
+package ${package.Controller};
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import javax.annotation.Resource;
+
+import $!{package.Service}.$!{table.serviceName};
+import ${package.Entity}.${entity};
+
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+    @Resource
+    private ${table.serviceName} ${table.entityPath}Service;
+
+    @PostMapping()
+    public boolean save(@RequestBody ${entity} ${table.entityPath}){
+        //@RequestBody注解的作用是将接收到的JOSN格式数据转化成User对象
+        //新增或者更新
+        if(${table.entityPath}.getId()==null){
+        return ${table.entityPath}Service.save(${table.entityPath});
+        } else {
+        return ${table.entityPath}Service.updateById(${table.entityPath});
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public Boolean delete(@PathVariable Integer id) {
+        return ${table.entityPath}Service.removeById(id);
+    }
+
+    @GetMapping
+    public List<${entity}> findAll() {
+        return ${table.entityPath}Service.list();
+    }
+
+    @GetMapping("/{id}")
+    public ${entity} findOne(@PathVariable Integer id) {
+        return ${table.entityPath}Service.getById(id);
+    }
+
+    @GetMapping("/page")
+    public IPage<${entity}> findPage(@RequestParam Integer pageNum,
+                                    @RequestParam Integer pageSize,
+                                    @RequestParam(defaultValue = "") String parm) {
+        IPage<${entity}> page = new Page<>(pageNum, pageSize);
+        QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
+        if(!"".equals(parm)){
+        queryWrapper.like("parm",parm);
+        }
+        return ${table.entityPath}Service.page(page, queryWrapper);
+    }
+}
+#end
