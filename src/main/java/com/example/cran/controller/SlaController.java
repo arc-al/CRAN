@@ -55,12 +55,16 @@ public class SlaController {
 
     @GetMapping("/page")
     public IPage<Sla> findPage(@RequestParam Integer pageNum,
-                                    @RequestParam Integer pageSize,
-                                    @RequestParam(defaultValue = "") String parm) {
+                               @RequestParam Integer pageSize,
+                               @RequestParam(defaultValue = "") String id,
+                               @RequestParam(defaultValue = "") String type) {
         IPage<Sla> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Sla> queryWrapper = new QueryWrapper<>();
-        if(!"".equals(parm)){
-        queryWrapper.like("parm",parm);
+        if(!"".equals(id)){
+            queryWrapper.eq("id",id);
+        }
+        if(!"".equals(type)){
+            queryWrapper.like("type",type);
         }
         return slaService.page(page, queryWrapper);
     }

@@ -1,2 +1,5 @@
-package com.example.cran.simulation.entity;public class BaseStation {
+package com.example.cran.simulation.entity;
+
+public class BaseStation {
+
 }

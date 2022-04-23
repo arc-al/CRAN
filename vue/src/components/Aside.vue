@@ -56,6 +56,10 @@
         <i class="el-icon-s-custom"></i>
         <span slot="title">SLA信息</span>
       </el-menu-item>
+      <el-menu-item index="/manage/SLASelect">
+        <i class="el-icon-s-custom"></i>
+        <span slot="title">适配性分析</span>
+      </el-menu-item>
     </el-submenu>
 
 
@@ -65,6 +69,7 @@
         <span slot="title">百度地图</span>
       </template>
     </el-menu-item>
+
 
 
   </el-menu>

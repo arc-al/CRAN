@@ -1,12 +1,8 @@
 <template>
   <div>
-
     <div style="margin: 10px 0">
-      <el-input style="width: 200px" suffix-icon="el-icon-search" placeholder="请输入基站ID" v-model="id"></el-input>
-      <el-input style="width: 200px" suffix-icon="el-icon-message" placeholder="请输入基站站型" class="ml-5" v-model="type"></el-input>
-      <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入基站片区" class="ml-5" v-model="area"></el-input>
-      <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入基站经度" class="ml-5" v-model="longitude"></el-input>
-      <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入基站纬度" class="ml-5" v-model="latitude"></el-input>
+      <el-input style="width: 200px" suffix-icon="el-icon-search" placeholder="请输入SLA ID" v-model="id"></el-input>
+      <el-input style="width: 200px" suffix-icon="el-icon-message" placeholder="请输入类别" class="ml-5" v-model="type"></el-input>
       <el-button class="ml-5" type="primary" @click="load" style="margin-top:10px ">搜索</el-button>
       <el-button class="ml-5" type="warning" @click="reset">重置</el-button>
     </div>
@@ -26,16 +22,20 @@
     </div>
     <el-table :data="tableData" border stripe :header-cell-class-name="headerBg" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="基站Id" width="80" align="center">
+      <el-table-column prop="id" label="SLA配置Id" width="100" align="center">
         <template slot-scope="scope">
-          gNB-{{scope.row.id}}
+          sla-sg-{{scope.row.id}}
         </template>
       </el-table-column>
-      <el-table-column prop="type" label="基站站型" width="80" align="center"></el-table-column>
-      <el-table-column prop="area" label="基站片区" width="120" align="center"></el-table-column>
-      <el-table-column prop="longitude" label="经度" width="150" align="center"></el-table-column>
-      <el-table-column prop="latitude" label="纬度" width="150" align="center"></el-table-column>
-      <el-table-column prop="pci" label="PCI"  align="center"></el-table-column>
+      <el-table-column prop="type" label="SLA类别" width="80" align="center"></el-table-column>
+      <el-table-column prop="uplinkBw" label="上行带宽" width="120" align="center"></el-table-column>
+      <el-table-column prop="downlinkBw" label="下行带宽" width="150" align="center"></el-table-column>
+      <el-table-column prop="eteDelay" label="端到端时延" width="150" align="center"></el-table-column>
+      <el-table-column prop="resIsoLevel" label="资源隔离等级"  align="center"></el-table-column>
+      <el-table-column prop="secIsoLevel" label="安全隔离等级"  align="center"></el-table-column>
+      <el-table-column prop="pirority" label="优先级"  align="center"></el-table-column>
+      <el-table-column prop="connSlicNum" label="绑定切片个数"  align="center"></el-table-column>
+      <el-table-column prop="message" label="备注"  align="center"></el-table-column>
       <el-table-column prop="operation" label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit" style="margin-left: 2px"></i></el-button>
@@ -64,28 +64,43 @@
       </el-pagination>
 
     </div>
-    <el-dialog title="基站信息" :visible.sync="dialogFormVisible" width="30%" >
+    <el-dialog title="SLA信息" :visible.sync="dialogFormVisible" width="40%" >
       <el-form label-width="80px" size="small" style="margin-right: 30px">
-        <el-form-item label="经度" >
-          <el-input v-model="form.longitude" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="维度" >
-          <el-input v-model="form.latitude" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="站型" >
-          <el-select v-model="form.type" autocomplete="off" placeholder="请选择基站站型" style="width: 100%">
+        <el-form-item label="类别" label-width="100px">
+          <el-select v-model="form.type" autocomplete="off" placeholder="请选择SLA站型" style="width: 100%">
             <el-option v-for="item in typeOptions" :value="item.label" :key="item.value" :label="item.label">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="片区" >
-          <el-select v-model="form.area" autocomplete="off" placeholder="请选择基站片区" style="width: 100%">
-            <el-option v-for="item in areaOptions" :value="item.label" :key="item.value" :label="item.label">
+        <el-form-item label="上行带宽" label-width="100px">
+          <el-select v-model="form.uplinkBw" autocomplete="off" placeholder="请选择SLA上行带宽" style="width: 100%">
+            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="PCI" >
-          <el-input v-model="form.pci" autocomplete="off"></el-input>
+        <el-form-item label="下行带宽" label-width="100px">
+        <el-select v-model="form.downlinkBw" autocomplete="off" placeholder="请选择SLA下行带宽" style="width: 100%">
+          <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
+          </el-option>
+        </el-select>
+        </el-form-item>
+        <el-form-item label="端到端时延" label-width="100px">
+        <el-select v-model="form.eteDelay" autocomplete="off" placeholder="请选择SLA端到端时延" style="width: 100%">
+          <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
+          </el-option>
+        </el-select>
+        </el-form-item>
+        <el-form-item label="资源隔离等级" label-width="100px">
+        <el-select v-model="form.resIsoLevel" autocomplete="off" placeholder="请选择SLA资源隔离等级" style="width: 100%">
+          <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
+          </el-option>
+        </el-select>
+       </el-form-item>
+        <el-form-item label="安全隔离等级" label-width="100px">
+          <el-select v-model="form.secIsoLevel" autocomplete="off" placeholder="请选择SLA安全隔离等级" style="width: 100%">
+            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -109,28 +124,16 @@ export default {
       type: "",
       area: "",
       typeOptions: [
-        {
-          value: 1,
-          label: "室分"
-        },
-        {
-          value: 2,
-          label: "宏站"
-        }
+        {value: 1, label: "URLLC"},
+        {value: 2, label: "eMBB"},
+        {value: 3, label: "mMTC"}
       ],
-      areaOptions: [
-        {
-          value: 0,
-          label: "管城区"
-        },
-        {
-          value: 1,
-          label: "金水区"
-        },
-        {
-          value: 2,
-          label: "二七区"
-        },
+      selectoptions: [
+        {value: 0, label: "低"},
+        {value: 1, label: "中低"},
+        {value: 2, label: "中"},
+        {value: 2, label: "中高"},
+        {value: 2, label: "高"},
       ],
       longitude: "",
       latitude: "",
@@ -150,15 +153,12 @@ export default {
           this.load()
     },
     load(){
-      this.request.get("base-station/page", {
+      this.request.get("sla/page", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           id: this.id,
-          type: this.type,
-          area: this.area,
-          longitude: this.longitude,
-          latitude: this.latitude
+          type: this.type
         }
       }).then(res=>{
         this.tableData = res.records
@@ -179,7 +179,7 @@ export default {
       this.form = {}
     },
     save(){
-      this.request.post("base-station", this.form).then(res=>{
+      this.request.post("sla", this.form).then(res=>{
         if(res){
           this.$message.success("保存成功！")
           this.dialogFormVisible = false
@@ -194,7 +194,7 @@ export default {
       this.dialogFormVisible = true
     },
     handleDelete(id){
-      this.request.delete("base-station/"+id).then(res=>{
+      this.request.delete("sla/"+id).then(res=>{
         if(res){
           this.$message.success("删除成功！")
           this.load()

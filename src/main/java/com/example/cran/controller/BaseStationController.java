@@ -37,9 +37,7 @@ public class BaseStationController {
         } else {
             return baseStationService.updateById(baseStation);
         }
-
     }
-
 
 
     @PostMapping("/deleteBatch")

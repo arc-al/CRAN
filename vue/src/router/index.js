@@ -15,7 +15,8 @@ const routes = [
       { path: "Mec",  name: "MEC信息", component: ()=> import("../views/Mec"),},
       { path: "Slicing",  name: "切片信息", component: ()=> import("../views/Slicing"),},
       { path: "SLA",  name: "SLA信息", component: ()=> import("../views/SLA"),},
-      { path: "map",  name: "百度地图", component: ()=> import("../views/Map"),}
+      { path: "SLASelect",  name: "适配性分析", component: ()=> import("../views/selectSla"),},
+      { path: "map",  name: "百度地图", component: ()=> import("../views/Map"),},
     ]
   }
 ]

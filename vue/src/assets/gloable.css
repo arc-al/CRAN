@@ -1,6 +1,7 @@
 html,body,div{
     margin: 0;
     padding: 0;
+    /*cursor: url('终端.png'),auto;*/
 }
 html,body{
     height: 100%;
