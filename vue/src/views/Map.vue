@@ -2,6 +2,9 @@
   <div>
     <el-button round @click="addBS" style="margin: 10px 10px " size="medium ">添加基站</el-button>
     <el-button round @click="getPosition" style="margin: 10px 10px " size="medium ">查看经纬度</el-button>
+    <el-button round @click="getfugai" style="margin: 10px 10px " size="medium ">添加覆盖</el-button>
+    <el-button round @click="printfugai" style="margin: 10px 10px " size="medium ">绘制边缘</el-button>
+    <el-button round @click="posttfugai" style="margin: 10px 10px " size="medium ">提交覆盖</el-button>
     <div id="container" style="width: 100%; height: calc(88vh)" class="test111"></div>
   </div>
 </template>
@@ -10,6 +13,7 @@
 import baseStation from '../assets/基站1.png'
 import terminal from '../assets/终端.png'
 import mec from '../assets/mec.png'
+import fugaisign from '../assets/fugaisign.png'
 
 export default {
   name: "Map",
@@ -18,8 +22,11 @@ export default {
       nodeData: {},
       total: 0,
       isAddBs: false,
+      isFugai:false,
       map: {},
       bsObject: {},
+      longitude:[],//覆盖四个经纬度
+      latitude:[],
       getPos: false,
     }
   },
@@ -39,21 +46,21 @@ export default {
     await this.getData("base-station")
     var i=0;
     while (i<this.total){
-      map.addOverlay(this.addPoints(this.nodeData[i].id,this.nodeData[i].longitude,this.nodeData[i].latitude,baseStation,"base-station"));
+      map.addOverlay(this.addPoints(this.nodeData[i].longitude,this.nodeData[i].latitude,baseStation));
       i++;
     }
     //将终端的点部署在地图上
     await this.getData("terminal")
     i=0;
     while (i<this.total){
-      map.addOverlay(this.addPoints(this.nodeData[i].id,this.nodeData[i].longitude,this.nodeData[i].latitude,terminal,"terminal"));
+      map.addOverlay(this.addPoints(this.nodeData[i].longitude,this.nodeData[i].latitude,terminal));
       i++;
     }
     //将MEC的点部署再地图上
     await this.getData("mec")
     i=0;
     while (i<this.total){
-      map.addOverlay(this.addPoints(this.nodeData[i].id,this.nodeData[i].longitude,this.nodeData[i].latitude,mec,"mec"));
+      map.addOverlay(this.addPoints(this.nodeData[i].longitude,this.nodeData[i].latitude,mec));
       i++;
     }
 
@@ -64,27 +71,13 @@ export default {
     //周期刷新所有节点的位置
   },
   methods: {
-    addPoints(id,longitude,latitude,img,nodename){
+    addPoints(longitude,latitude,img){
       var point = new BMap.Point(longitude, latitude);
       var myIcon = new BMap.Icon(img, new BMap.Size(50, 52));
       // 创建标注对象并添加到地图
       var marker = new BMap.Marker(point, {
         icon: myIcon,
         enableDragging: true
-      });
-      marker.addEventListener('dragend', () => {
-        var nowPoint = marker.getPosition(); // 拖拽完成之后坐标的位置
-        var tempObject = {};
-        tempObject.longitude = nowPoint.lng;
-        tempObject.latitude = nowPoint.lat;
-        tempObject.id=id;
-        this.request.post(nodename, tempObject).then(res=>{
-          if(res){
-            this.$message.success("修改位置成功！")
-          } else {
-            this.$message.error("修改位置失败！")
-          }
-        })
       });
       return marker
     },
@@ -97,8 +90,11 @@ export default {
     addBS(){
       this.isAddBs = !this.isAddBs;
     },
+    getfugai(){
+      this.isFugai=!this.isFugai;
+    },
     handleClick(e){
-      this.map.addOverlay(this.addPoints("",e.point.lng, e.point.lat,baseStation,"base-station"));
+      this.map.addOverlay(this.addPoints(e.point.lng, e.point.lat,baseStation));
       this.bsObject.longitude=e.point.lng;
       this.bsObject.latitude=e.point.lat;
       this.request.post("base-station", this.bsObject).then(res=>{
@@ -108,14 +104,35 @@ export default {
           this.$message.error("添加基站失败！")
         }
       })
+      // console.log(e)
     },
 
     getPosition(){
+      // this.map.addEventListener('click', function (e){
+      //   alert("经度:"+e.point.lng+", 纬度:"+e.point.lat)
+      // });
       this.getPos = !this.getPos;
     },
     handleClickPos(e){
       alert("经度:"+e.point.lng+", 纬度:"+e.point.lat)
-    }
+    },
+    handleClickPosfugai(e){
+      this.map.addOverlay(this.addPoints(e.point.lng, e.point.lat,fugaisign));
+      this.longitude.push(e.point.lng);
+      this.latitude.push(e.point.lat);
+    },
+    printfugai(){
+      var polygon = new BMap.Polygon([
+        new BMap.Point(this.longitude[0],this.latitude[0]),
+        new BMap.Point(this.longitude[0],this.latitude[1]),
+        new BMap.Point(this.longitude[1],this.latitude[1]),
+        new BMap.Point(this.longitude[1],this.latitude[0]),
+      ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});   //创建折线
+      this.map.addOverlay(polygon);   //增加折线
+    },
+    posttfugai(){
+
+    },
   },
   watch: {
     'isAddBs':{
@@ -136,6 +153,18 @@ export default {
         }
       },
     },
+    'isFugai':{
+      handler: function (val) {
+        if(val){
+          this.map.addEventListener('click', this.handleClickPosfugai);
+        } else {
+          this.map.removeEventListener('click', this.handleClickPosfugai);
+        }
+      },
+    },
+
+
+
   }
 }
 </script>
