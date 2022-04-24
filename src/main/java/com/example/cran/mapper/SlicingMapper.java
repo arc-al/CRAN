@@ -3,6 +3,7 @@ package com.example.cran.mapper;
 import com.example.cran.entity.Slicing;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * <p>
@@ -16,4 +17,7 @@ public interface SlicingMapper extends BaseMapper<Slicing> {
 
     @Select("select max(id) from slicing")
     int getMaxid();
+
+    @Update("update slicing set service=#{businessName} where id=#{slicingId}")
+    Boolean bind(String businessName, String slicingId);
 }

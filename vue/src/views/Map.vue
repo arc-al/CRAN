@@ -39,21 +39,21 @@ export default {
     await this.getData("base-station")
     var i=0;
     while (i<this.total){
-      map.addOverlay(this.addPoints(this.nodeData[i].longitude,this.nodeData[i].latitude,baseStation));
+      map.addOverlay(this.addPoints(this.nodeData[i].id,this.nodeData[i].longitude,this.nodeData[i].latitude,baseStation,"base-station"));
       i++;
     }
     //将终端的点部署在地图上
     await this.getData("terminal")
     i=0;
     while (i<this.total){
-      map.addOverlay(this.addPoints(this.nodeData[i].longitude,this.nodeData[i].latitude,terminal));
+      map.addOverlay(this.addPoints(this.nodeData[i].id,this.nodeData[i].longitude,this.nodeData[i].latitude,terminal,"terminal"));
       i++;
     }
     //将MEC的点部署再地图上
     await this.getData("mec")
     i=0;
     while (i<this.total){
-      map.addOverlay(this.addPoints(this.nodeData[i].longitude,this.nodeData[i].latitude,mec));
+      map.addOverlay(this.addPoints(this.nodeData[i].id,this.nodeData[i].longitude,this.nodeData[i].latitude,mec,"mec"));
       i++;
     }
 
@@ -64,13 +64,27 @@ export default {
     //周期刷新所有节点的位置
   },
   methods: {
-    addPoints(longitude,latitude,img){
+    addPoints(id,longitude,latitude,img,nodename){
       var point = new BMap.Point(longitude, latitude);
       var myIcon = new BMap.Icon(img, new BMap.Size(50, 52));
       // 创建标注对象并添加到地图
       var marker = new BMap.Marker(point, {
         icon: myIcon,
         enableDragging: true
+      });
+      marker.addEventListener('dragend', () => {
+        var nowPoint = marker.getPosition(); // 拖拽完成之后坐标的位置
+        var tempObject = {};
+        tempObject.longitude = nowPoint.lng;
+        tempObject.latitude = nowPoint.lat;
+        tempObject.id=id;
+        this.request.post(nodename, tempObject).then(res=>{
+          if(res){
+            this.$message.success("修改位置成功！")
+          } else {
+            this.$message.error("修改位置失败！")
+          }
+        })
       });
       return marker
     },
@@ -84,7 +98,7 @@ export default {
       this.isAddBs = !this.isAddBs;
     },
     handleClick(e){
-      this.map.addOverlay(this.addPoints(e.point.lng, e.point.lat,baseStation));
+      this.map.addOverlay(this.addPoints("",e.point.lng, e.point.lat,baseStation,"base-station"));
       this.bsObject.longitude=e.point.lng;
       this.bsObject.latitude=e.point.lat;
       this.request.post("base-station", this.bsObject).then(res=>{
@@ -94,13 +108,9 @@ export default {
           this.$message.error("添加基站失败！")
         }
       })
-      // console.log(e)
     },
 
     getPosition(){
-      // this.map.addEventListener('click', function (e){
-      //   alert("经度:"+e.point.lng+", 纬度:"+e.point.lat)
-      // });
       this.getPos = !this.getPos;
     },
     handleClickPos(e){

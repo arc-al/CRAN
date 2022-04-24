@@ -1,186 +1,160 @@
 <template>
   <div>
-    <el-table :data="tableData" border stripe :header-cell-class-name="headerBg" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="typicalName" label="典型业务名称" width="120" align="center"></el-table-column>
-      <el-table-column prop="uplinkBw" label="上行带宽需求" width="120" align="center">
-        <el-select v-model="form.type" autocomplete="off" placeholder="请选择SLA站型" style="width: 100%">
-          <el-option v-for="item in typeOptions" :value="item.label" :key="item.value" :label="item.label">
-          </el-option>
-        </el-select>
+    <el-table :data="tableData"
+              border
+              stripe
+              :row-class-name="tableRowClassName"
+              :header-cell-class-name="headerBg"
+              highlight-current-row
+              @row-click="onRowClick">
+      <el-table-column width="60" align="center" label="">
+        <template slot-scope="scope">
+          <el-radio :label="scope.$index" v-model="radio">{{""}}</el-radio>
+        </template>
       </el-table-column>
-      <el-table-column prop="downlinkBw" label="下行带宽需求" width="150" align="center"></el-table-column>
-      <el-table-column prop="eteDelay" label="端到端时延需求" width="150" align="center"></el-table-column>
-      <el-table-column prop="resIsoLevel" label="资源隔离等级"  align="center"></el-table-column>
-      <el-table-column prop="secIsoLevel" label="安全隔离等级"  align="center"></el-table-column>
-      <el-table-column prop="pirority" label="业务优先级"  align="center"></el-table-column>
+      <el-table-column prop="typicalName" label="典型业务名称" width="250" align="center"></el-table-column>
+      <el-table-column prop="uplinkBw" label="上行带宽需求"  align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.uplinkBw" autocomplete="off" placeholder="请选择上行带宽需求" style="width: 100%">
+            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column prop="downlinkBw" label="下行带宽需求"  align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.downlinkBw" autocomplete="off" placeholder="请选择下行带宽需求" style="width: 100%">
+            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column prop="eteDelay" label="端到端时延需求"  align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.eteDelay" autocomplete="off" placeholder="请选择端到端时延需求" style="width: 100%">
+            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column prop="resIsoLevel" label="资源隔离等级"  align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.resIsoLevel" autocomplete="off" placeholder="请选择资源隔离等级" style="width: 100%">
+            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column prop="secIsoLevel" label="安全隔离等级"  align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.secIsoLevel" autocomplete="off" placeholder="请选择安全隔离等级" style="width: 100%">
+            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column prop="priority" label="业务优先级"  align="center">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.priority" autocomplete="off" placeholder="请选择业务优先级" style="width: 100%">
+            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label"></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
     </el-table>
-    <div style="padding: 10px 0">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pageNum"
-          :page-sizes="[5, 10, 15, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
 
+    <div style="height: 100px;" class="match">
+      <el-button type="primary" style="width: 100px" @click="matchSlicing">匹配</el-button>
     </div>
-    <el-dialog title="SLA信息" :visible.sync="dialogFormVisible" width="40%" >
-      <el-form label-width="80px" size="small" style="margin-right: 30px">
-        <el-form-item label="类别" label-width="100px">
-          <el-select v-model="form.type" autocomplete="off" placeholder="请选择SLA站型" style="width: 100%">
-            <el-option v-for="item in typeOptions" :value="item.label" :key="item.value" :label="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="上行带宽" label-width="100px">
-          <el-select v-model="form.uplinkBw" autocomplete="off" placeholder="请选择SLA上行带宽" style="width: 100%">
-            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="下行带宽" label-width="100px">
-          <el-select v-model="form.downlinkBw" autocomplete="off" placeholder="请选择SLA下行带宽" style="width: 100%">
-            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="端到端时延" label-width="100px">
-          <el-select v-model="form.eteDelay" autocomplete="off" placeholder="请选择SLA端到端时延" style="width: 100%">
-            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="资源隔离等级" label-width="100px">
-          <el-select v-model="form.resIsoLevel" autocomplete="off" placeholder="请选择SLA资源隔离等级" style="width: 100%">
-            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="安全隔离等级" label-width="100px">
-          <el-select v-model="form.secIsoLevel" autocomplete="off" placeholder="请选择SLA安全隔离等级" style="width: 100%">
-            <el-option v-for="item in selectoptions" :value="item.label" :key="item.value" :label="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="save">确 定</el-button>
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-      </div>
-    </el-dialog>
+    <hr/>
+
+
+    <el-table :data="matchTableData" border stripe :header-cell-class-name="headerBg" >
+      <el-table-column prop="id" label="切片Id" width="80" align="center">
+        <template slot-scope="scope">
+          nsi-sg-{{scope.row.id}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="type" label="切片类型" align="center"></el-table-column>
+      <el-table-column prop="service" label="服务类型"  align="center"></el-table-column>
+      <el-table-column prop="connSla" label="绑定SLA ID"  align="center">
+        <template slot-scope="scope">
+          sla-sg-{{scope.row.connSla}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="state" label="切片状态"  align="center"></el-table-column>
+      <el-table-column prop="message" label="备注"  align="center"></el-table-column>
+      <el-table-column prop="operation" label="操作" align="center" width="200">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="bind(scope.row.id)">绑定</el-button>
+        </template>
+
+      </el-table-column>
+    </el-table>
+
+
   </div>
 </template>
 
 <script>
 export default {
-  name: "BaseStation",
+  name: "selectSla",
   data(){
     return {
       tableData: [],
+      radio: '',
+      matchTableData: [],
       total: 0,
-      pageNum: 1,
-      pageSize: 5,
-      id: "",
-      type: "",
-      area: "",
-      typeOptions: [
-        {value: 1, label: "URLLC"},
-        {value: 2, label: "eMBB"},
-        {value: 3, label: "mMTC"}
-      ],
       selectoptions: [
         {value: 0, label: "低"},
         {value: 1, label: "中低"},
         {value: 2, label: "中"},
-        {value: 2, label: "中高"},
-        {value: 2, label: "高"},
+        {value: 3, label: "中高"},
+        {value: 4, label: "高"},
       ],
-      longitude: "",
-      latitude: "",
-      form: {},
       multipleSelection: [],
       dialogFormVisible: false,
       headerBg:"headerBg"
     }
   },
   methods: {
-    handleSizeChange(pageSize){
-      this.pageSize = pageSize,
-          this.load()
-    },
-    handleCurrentChange(pageNum){
-      this.pageNum = pageNum,
-          this.load()
-    },
     load(){
-      this.request.get("sla/page", {
-        params: {
-          pageNum: this.pageNum,
-          pageSize: this.pageSize,
-          id: this.id,
-          type: this.type
-        }
-      }).then(res=>{
-        this.tableData = res.records
+      this.request.get("typical-business").then(res=>{
+        this.tableData = res
         this.total = res.total
       })
-    },
-    reset(){
-      this.id = ""
-      this.type = ""
-      this.area = ""
-      this.longitude  = ""
-      this.latitude = ""
-      this.load()
-
     },
     handleadd(){
       this.dialogFormVisible = true
       this.form = {}
     },
-    save(){
-      this.request.post("sla", this.form).then(res=>{
-        if(res){
-          this.$message.success("保存成功！")
-          this.dialogFormVisible = false
-          this.load()
-        } else {
-          this.$message.error("保存失败！")
+    tableRowClassName({row, rowIndex}) {
+      row.index = rowIndex
+    },
+    matchSlicing(){
+      this.request.post("sla/selectSla",this.multipleSelection).then(res=>{
+        if(res[0].length==0){
+          this.$message.error("匹配完成，未发现匹配项");
+          this.matchTableData = '';
+        }else{
+          this.$message.success("匹配完成")
+          this.matchTableData = res[0];
         }
       })
     },
-    handleEdit(row){
-      this.form = row
-      this.dialogFormVisible = true
+    onRowClick(row) {
+      this.radio = row.index
+      this.multipleSelection = row
+      delete this.multipleSelection.index
     },
-    handleDelete(id){
-      this.request.delete("sla/"+id).then(res=>{
+    bind(id){
+      this.request.post("slicing/bindSlicing",{
+        params:{
+          businessName: this.multipleSelection.typicalName,
+          slicingId: id
+        }
+      }).then(res=>{
         if(res){
-          this.$message.success("删除成功！")
-          this.load()
-        } else {
-          this.$message.success("删除失败！")
+          this.$message.error("绑定成功");
+        }else{
+          this.$message.success("绑定失败")
         }
       })
-    },
-    handleSelectionChange(val){
-      this.multipleSelection = val
-
-    },
-    delBatch(){
-      let ids = this.multipleSelection.map(v => v.id)
-      this.request.post("/deleteBatch", ids).then(res=>{
-        if(res){
-          this.$message.success("批量删除成功！")
-          this.load()
-        } else {
-          this.$message.success("批量删除失败！")
-        }
-      })
-    },
+    }
   },
   created() {
     //请求分页查询数据
@@ -199,5 +173,13 @@ export default {
 }
 .el-icon-arrow-down {
   font-size: 12px;
+}
+.match{
+  /*flex 布局*/
+  display: flex;
+  /*实现垂直居中*/
+  align-items: center;
+  /*实现水平居中*/
+  justify-content: center;
 }
 </style>

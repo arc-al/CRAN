@@ -16,18 +16,18 @@ public class CodeGenerate {
                     builder.author("---") // 设置作者
                             .enableSwagger() // 开启 swagger 模式
                             .fileOverride() // 覆盖已生成文件
-                            .outputDir("F:\\IdeaProjects\\src\\main\\java\\"); // 指定输出目录
+                            .outputDir("src\\main\\java"); // 指定输出目录
                 })
                 .packageConfig(builder -> {
                     builder.parent("com.example.cran") // 设置父包名
                             .moduleName(null) // 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "F:\\IdeaProjects\\src\\main\\resources\\mapper\\")); // 设置mapperXml生成路径
+                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "src\\main\\resources\\mapper")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
                     builder.entityBuilder().enableLombok();
                     builder.controllerBuilder().controllerBuilder().enableHyphenStyle()
                             .enableRestStyle();  // 开启生成@RestController 控制器
-                    builder.addInclude("sla"); // 设置需要生成的表名
+                    builder.addInclude("typical_business"); // 设置需要生成的表名
                 }).execute();
     }
 }

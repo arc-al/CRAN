@@ -3,6 +3,9 @@ package com.example.cran.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.example.cran.entity.MatchDemand;
+import com.example.cran.entity.Slicing;
+import com.example.cran.entity.TypicalBusiness;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import javax.annotation.Resource;
@@ -68,4 +71,12 @@ public class SlaController {
         }
         return slaService.page(page, queryWrapper);
     }
+
+    @PostMapping("/selectSla")
+    public List<Object> selectSla(@RequestBody MatchDemand matchDemand) throws IllegalAccessException {
+        return slaService.selectSla(matchDemand);
+    }
+
+
+
 }

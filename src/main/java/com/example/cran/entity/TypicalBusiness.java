@@ -1,5 +1,6 @@
 package com.example.cran.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,18 +13,17 @@ import lombok.Setter;
  * </p>
  *
  * @author ---
- * @since 2022-04-19
+ * @since 2022-04-23
  */
 @Getter
 @Setter
-  @ApiModel(value = "Sla对象", description = "")
-public class Sla implements Serializable {
+@TableName("typical_business")
+@ApiModel(value = "TypicalBusiness对象", description = "")
+public class TypicalBusiness implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
       private Integer id;
-
-    private String type;
 
     private String uplinkBw;
 
@@ -37,9 +37,9 @@ public class Sla implements Serializable {
 
     private String priority;
 
-    private Integer connSlicNum;
+    private String typicalName;
 
-    private String message;
+    private Integer ueNum;
 
 
 }

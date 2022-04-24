@@ -132,8 +132,8 @@ export default {
         {value: 0, label: "低"},
         {value: 1, label: "中低"},
         {value: 2, label: "中"},
-        {value: 2, label: "中高"},
-        {value: 2, label: "高"},
+        {value: 3, label: "中高"},
+        {value: 4, label: "高"},
       ],
       longitude: "",
       latitude: "",
@@ -181,6 +181,7 @@ export default {
     save(){
       this.request.post("sla", this.form).then(res=>{
         if(res){
+          console.log(this.form)
           this.$message.success("保存成功！")
           this.dialogFormVisible = false
           this.load()
@@ -209,7 +210,7 @@ export default {
     },
     delBatch(){
       let ids = this.multipleSelection.map(v => v.id)
-      this.request.post("/deleteBatch", ids).then(res=>{
+      this.request.post("sla/deleteBatch", ids).then(res=>{
         if(res){
           this.$message.success("批量删除成功！")
           this.load()

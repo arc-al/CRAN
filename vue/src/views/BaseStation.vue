@@ -209,7 +209,7 @@ export default {
     },
     delBatch(){
       let ids = this.multipleSelection.map(v => v.id)
-      this.request.post("/deleteBatch", ids).then(res=>{
+      this.request.post("base-station/deleteBatch", ids).then(res=>{
         if(res){
           this.$message.success("批量删除成功！")
           this.load()

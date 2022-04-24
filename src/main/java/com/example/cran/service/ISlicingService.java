@@ -14,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ISlicingService extends IService<Slicing> {
 
     int getMaxid();
+
+    Boolean bind(String businessName, String slicingId);
+
 }
