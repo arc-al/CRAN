@@ -74,7 +74,7 @@ public class SlicingController {
         return slicingService.page(page, queryWrapper);
     }
 
-    @PostMapping("/bindSlicing")
+    @GetMapping("/bindSlicing")
     public Boolean bind(@RequestParam(defaultValue = "") String businessName,
                         @RequestParam(defaultValue = "") String slicingId){
         return slicingService.bind(businessName,slicingId);

@@ -117,6 +117,13 @@ export default {
         this.tableData = res
         this.total = res.total
       })
+      this.request.post("sla/selectSla",this.multipleSelection).then(res=>{
+        if(res[0].length==0){
+          this.matchTableData = '';
+        }else{
+          this.matchTableData = res[0];
+        }
+      })
     },
     handleadd(){
       this.dialogFormVisible = true
@@ -142,19 +149,20 @@ export default {
       delete this.multipleSelection.index
     },
     bind(id){
-      this.request.post("slicing/bindSlicing",{
+      this.request.get("slicing/bindSlicing",{
         params:{
           businessName: this.multipleSelection.typicalName,
           slicingId: id
         }
       }).then(res=>{
         if(res){
-          this.$message.error("绑定成功");
+          this.$message.success("绑定成功");
         }else{
-          this.$message.success("绑定失败")
+          this.$message.error("绑定失败")
         }
       })
-    }
+      this.load()
+    },
   },
   created() {
     //请求分页查询数据

@@ -18,6 +18,6 @@ public interface SlicingMapper extends BaseMapper<Slicing> {
     @Select("select max(id) from slicing")
     int getMaxid();
 
-    @Update("update slicing set service=#{businessName} where id=#{slicingId}")
+    @Update("update slicing set service=#{arg0} where id=#{arg1}")
     Boolean bind(String businessName, String slicingId);
 }
