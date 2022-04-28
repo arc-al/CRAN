@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px 20px ">
 
     <div style="margin: 10px 0">
       <el-input style="width: 200px" suffix-icon="el-icon-search" placeholder="请输入基站ID" v-model="id"></el-input>

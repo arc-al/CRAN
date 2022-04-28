@@ -2,6 +2,7 @@ package com.example.cran.mapper;
 
 import com.example.cran.entity.Mec;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -16,4 +17,7 @@ public interface MecMapper extends BaseMapper<Mec> {
 
     @Select("select max(id) from mec")
     int getMaxid();
+
+    @Delete("delete from mec where 1=1")
+    boolean deleteAll();
 }

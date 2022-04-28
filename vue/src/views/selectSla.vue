@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px 20px ">
     <el-table :data="tableData"
               border
               stripe
@@ -63,6 +63,8 @@
     <hr/>
 
 
+
+
     <el-table :data="matchTableData" border stripe :header-cell-class-name="headerBg" >
       <el-table-column prop="id" label="切片Id" width="80" align="center">
         <template slot-scope="scope">
@@ -117,13 +119,16 @@ export default {
         this.tableData = res
         this.total = res.total
       })
-      this.request.post("sla/selectSla",this.multipleSelection).then(res=>{
-        if(res[0].length==0){
-          this.matchTableData = '';
-        }else{
-          this.matchTableData = res[0];
-        }
-      })
+      if(this.multipleSelection.length!=0){
+        this.request.post("sla/selectSla",this.multipleSelection).then(res=>{
+          if(res[0].length==0){
+            this.matchTableData = '';
+          }else{
+            this.matchTableData = res[0];
+          }
+        })
+      }
+
     },
     handleadd(){
       this.dialogFormVisible = true

@@ -25,4 +25,9 @@ public class MecServiceImpl extends ServiceImpl<MecMapper, Mec> implements IMecS
     public Integer getMaxid() {
         return mecMapper.getMaxid();
     }
+
+    @Override
+    public boolean deleteAll() {
+        return mecMapper.deleteAll();
+    }
 }

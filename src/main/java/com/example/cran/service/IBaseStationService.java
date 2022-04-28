@@ -14,5 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IBaseStationService extends IService<BaseStation> {
 
     int getMaxid();
-
+    boolean deleteAll();
 }

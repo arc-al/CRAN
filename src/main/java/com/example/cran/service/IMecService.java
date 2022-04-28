@@ -14,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IMecService extends IService<Mec> {
 
     Integer getMaxid();
+    boolean deleteAll();
 }

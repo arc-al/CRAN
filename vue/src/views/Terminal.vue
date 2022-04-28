@@ -1,6 +1,5 @@
 <template>
-  <div>
-
+  <div style="padding: 20px 20px ">
     <div style="margin: 10px 0">
       <el-input style="width: 200px" suffix-icon="el-icon-search" placeholder="请输入终端ID" v-model="id"></el-input>
       <el-input style="width: 200px" suffix-icon="el-icon-message" placeholder="请输入终端业务类型" class="ml-5" v-model="businessType"></el-input>

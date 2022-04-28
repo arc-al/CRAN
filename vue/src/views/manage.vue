@@ -1,7 +1,7 @@
 <template>
   <el-container style="height: 100%; border: 1px solid #eee">
 
-    <el-aside :width="sideWidth+'px'" style="background-color: rgb(238, 241, 246); ">
+    <el-aside :width="sideWidth+'px'"  >
       <Aside :isCollapse="isCollapse" :logoTextShow="logoTextShow"/>
     </el-aside>
 
@@ -15,7 +15,7 @@
         </div>
       </el-header>
 
-      <el-main>
+      <el-main style="padding: 0 0 ">
         <router-view/>
       </el-main>
 

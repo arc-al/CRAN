@@ -2,6 +2,7 @@ package com.example.cran.mapper;
 
 import com.example.cran.entity.Terminal;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -16,4 +17,7 @@ public interface TerminalMapper extends BaseMapper<Terminal> {
 
     @Select("select max(id) from terminal")
     int getMaxid();
+
+    @Delete("delete from terminal where 1=1")
+    boolean deleteAll();
 }

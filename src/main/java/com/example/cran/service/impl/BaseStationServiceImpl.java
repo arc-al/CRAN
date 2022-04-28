@@ -26,4 +26,9 @@ public class BaseStationServiceImpl extends ServiceImpl<BaseStationMapper, BaseS
     public int getMaxid() {
         return baseStationMapper.getMaxid();
     }
+
+    @Override
+    public boolean deleteAll() {
+        return baseStationMapper.deleteAll();
+    }
 }

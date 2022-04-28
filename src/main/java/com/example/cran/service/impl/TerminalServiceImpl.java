@@ -25,4 +25,9 @@ public class TerminalServiceImpl extends ServiceImpl<TerminalMapper, Terminal> i
     public Integer getMaxid() {
         return terminalMapper.getMaxid();
     }
+
+    @Override
+    public boolean deleteAll() {
+        return terminalMapper.deleteAll();
+    }
 }

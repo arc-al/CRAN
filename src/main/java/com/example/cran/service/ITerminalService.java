@@ -14,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ITerminalService extends IService<Terminal> {
 
     Integer getMaxid();
+    boolean deleteAll();
 }

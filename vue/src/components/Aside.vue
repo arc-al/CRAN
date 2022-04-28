@@ -11,7 +11,7 @@
            @select="handleSelect"
   >
     <div style="height: 60px ;line-height: 60px ;text-align: center">
-      <img src="../assets/logo.jpg" alt="" style="height: 32px; position: relative; top: 9px; margin-right: 7px">
+      <img src="../assets/BUPT.png" alt="" style="height: 32px; position: relative; top: 9px; margin-right: 7px">
       <b style="color: white" v-show="logoTextShow">CRAN系统</b>
     </div>
 
@@ -41,12 +41,6 @@
         <span slot="title">切片信息</span>
       </template>
     </el-menu-item>
-    <el-menu-item index="/manage/home">
-      <template slot="title">
-        <i class="el-icon-house"></i>
-        <span slot="title">性能展示</span>
-      </template>
-    </el-menu-item>
     <el-submenu index="2">
       <template slot="title">
         <i class="el-icon-set-up"></i>
@@ -69,7 +63,12 @@
         <span slot="title">百度地图</span>
       </template>
     </el-menu-item>
-
+    <el-menu-item index="/manage/home">
+      <template slot="title">
+        <i class="el-icon-house"></i>
+        <span slot="title">性能展示</span>
+      </template>
+    </el-menu-item>
 
 
   </el-menu>

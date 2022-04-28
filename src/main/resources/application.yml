@@ -31,5 +31,10 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+files:
+  upload:
+    path: D:\IDEAProject\CRAN\files\
+#    path: src\main\java\com\example\cran\assets\files\
+
 
 
