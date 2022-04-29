@@ -1,5 +1,4 @@
 <template>
-  //map
   <div style="width: 100%">
     <el-button round @click="addBS" style="margin: 10px 10px " size="medium ">添加基站</el-button>
     <el-button round @click="addTerminal" style="margin: 10px 10px " size="medium ">添加终端</el-button>
@@ -109,6 +108,7 @@ export default {
       dialogFormVisible: false,
       isAddBs: false,
       isAddTerminal: false,
+      isCover:false,
       map: {},
       bsObject: {},
       terminalObject: {},
@@ -249,7 +249,7 @@ export default {
       this.isAddTerminal = !this.isAddTerminal;
     },
     getCover(){
-      this.isFugai=!this.isFugai;
+      this.isCover=!this.isCover;
     },
     printCover(){
       var polygon = new BMap.Polygon([
@@ -260,6 +260,7 @@ export default {
       ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});   //创建折线
       polygon.name = 'line'
       this.map.addOverlay(polygon);   //增加折线
+      console.log(this.longitude);
     },
     async postCover(){
       await this.request.get("base-station/cover",{
@@ -442,6 +443,7 @@ export default {
     handleClickPosCover(e){
       this.longitude.push(e.point.lng);
       this.latitude.push(e.point.lat);
+
     },
     getPosition(){
       this.getPos = !this.getPos;

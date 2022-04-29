@@ -9,6 +9,6 @@ public class run {
     public static Long startTime;
     public static Long endTime;
 
-    public static ThreadTaskMain main_thread
+    public static ThreadTaskMain main_thread;
 
 }
