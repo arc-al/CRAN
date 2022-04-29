@@ -1,9 +1,11 @@
 package com.example.cran.service.impl;
 
 import com.example.cran.entity.BaseStation;
+import com.example.cran.entity.Mec;
 import com.example.cran.entity.Terminal;
 import com.example.cran.service.IBaseStationService;
 import com.example.cran.service.IConnectionUpdateService;
+import com.example.cran.service.IMecService;
 import com.example.cran.service.ITerminalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class ConnectionUpdateServiceImpl implements IConnectionUpdateService {
 
     @Autowired
     private IBaseStationService baseStationService;
+
+    @Autowired
+    private IMecService mecService;
 
     /**
      * 更新基站与终端之间的连接关系，更新基站表中”连接终端数“字段，更新终端”关联基站id“字段
@@ -68,5 +73,27 @@ public class ConnectionUpdateServiceImpl implements IConnectionUpdateService {
         }
 
         return bsFlag&&tmFlag;
+    }
+
+
+    /**
+     * 更新基站与MEC的连接关系，默认一个区只有一个MEC，基站所处的区规定基站连接到哪个MEC
+     * @return
+     */
+    @Override
+    public boolean bs_mecUpdate() {
+        List<BaseStation> baseStationList = baseStationService.list();
+        List<Mec> mecList = mecService.list();
+        boolean b = false;
+        BreakLabel: for(BaseStation bs: baseStationList){
+            for(Mec mec: mecList){
+                if(bs.getArea().equals(mec.getArea())) {
+                    bs.setConnMecId(mec.getId());
+                    b = baseStationService.updateById(bs);
+                    if (!b) break BreakLabel;
+                }
+            }
+        }
+        return b;
     }
 }

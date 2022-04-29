@@ -59,4 +59,10 @@ public class BaseStation implements Serializable {
       @ApiModelProperty("连接终端数量")
       private Integer connTerminalNum;
 
+      @ApiModelProperty("连接MECId")
+      private Integer connMecId;
+
+      @ApiModelProperty("传输功率")
+      private int transpower;
+
 }

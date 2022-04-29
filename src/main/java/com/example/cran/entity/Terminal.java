@@ -39,11 +39,11 @@ public class Terminal implements Serializable {
     @ApiModelProperty("关联的基站id")
     private Integer connBs;
 
-    private String X;
+    private Double X;
 
-    private String Y;
+    private Double Y;
 
-    private String Z;
+    private Double Z;
 
 
 

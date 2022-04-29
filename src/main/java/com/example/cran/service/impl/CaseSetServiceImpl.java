@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.example.cran.service.ITerminalService;
+import com.example.cran.utils.CoordinateTrans;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -49,8 +50,11 @@ public class CaseSetServiceImpl implements ICaseSetService {
         String[][] bsResult = getData(baseStationPath);
         List<Object> bsList = getObject(bsResult, "com.example.cran.entity.BaseStation");
         boolean bsSave = false;
-        for(Object baseStation:bsList){
-            bsSave=baseStationService.save((BaseStation) baseStation);
+        for(Object bs:bsList){
+            BaseStation baseStation = (BaseStation) bs;
+            baseStation.setX(CoordinateTrans.longitudeToX(baseStation.getLongitude()));
+            baseStation.setY(CoordinateTrans.latitudeToY(baseStation.getLatitude()));
+            bsSave=baseStationService.save(baseStation);
             if(!bsSave) break;
         }
         boolean flagBs = bsDelete&&bsSave;
@@ -62,14 +66,16 @@ public class CaseSetServiceImpl implements ICaseSetService {
         String[][] terminalResult = getData(terminalPath);
         List<Object> terminalList = getObject(terminalResult, "com.example.cran.entity.Terminal");
         boolean terminalSave = false;
-        for(Object terminal:terminalList){
-            terminalSave = terminalService.save((Terminal) terminal);
+        for(Object tm:terminalList){
+            Terminal terminal = (Terminal) tm;
+            terminal.setX(CoordinateTrans.longitudeToX(terminal.getLongitude()));
+            terminal.setY(CoordinateTrans.latitudeToY(terminal.getLatitude()));
+            terminalSave = terminalService.save(terminal);
             if(!terminalSave) break;
         }
         boolean flagTerminal = terminalDelete&&terminalSave;
 
         return flagTerminal&&flagBs;
-//        return true;
     }
 
     @Override

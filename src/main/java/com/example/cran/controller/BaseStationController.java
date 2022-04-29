@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.cran.service.IConnectionUpdateService;
+import com.example.cran.utils.CoordinateTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -36,12 +37,7 @@ public class BaseStationController {
     public boolean save(@RequestBody BaseStation baseStation){
         //@RequestBody注解的作用是将接收到的JOSN格式数据转化成User对象
         //新增或者更新
-        if(baseStation.getId()==null){
-            baseStation.setId(baseStationService.getMaxid()+1);
-            return baseStationService.save(baseStation);
-        } else {
-            return baseStationService.updateById(baseStation);
-        }
+        return baseStationService.saveData(baseStation);
     }
 
 
@@ -58,12 +54,14 @@ public class BaseStationController {
     @GetMapping
     public List<BaseStation> findAll() {
         connectionUpdateService.bs_terminalUpdate();
+        connectionUpdateService.bs_mecUpdate();
         return baseStationService.list();
     }
 
     @GetMapping("/{id}")
     public BaseStation findOne(@PathVariable Integer id) {
         connectionUpdateService.bs_terminalUpdate();
+        connectionUpdateService.bs_mecUpdate();
         return baseStationService.getById(id);
     }
 
@@ -76,6 +74,7 @@ public class BaseStationController {
                                       @RequestParam(defaultValue = "") String longitude,
                                       @RequestParam(defaultValue = "") String latitude) {
         connectionUpdateService.bs_terminalUpdate();
+        connectionUpdateService.bs_mecUpdate();
         IPage<BaseStation> page = new Page<>(pageNum, pageSize);
         QueryWrapper<BaseStation> oqw = new QueryWrapper<>();
         if(!"".equals(id)){
@@ -95,5 +94,11 @@ public class BaseStationController {
         }
         oqw.orderByAsc("id");
         return baseStationService.page(page, oqw);
+    }
+
+    //覆盖
+    @GetMapping("/cover")
+    public List<Object> counterCover(@RequestParam String longitude1, @RequestParam String longitude2, @RequestParam String latitude1, @RequestParam String latitude2) {
+        return baseStationService.counterCover(longitude1,longitude2,latitude1,latitude2);
     }
 }

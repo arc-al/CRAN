@@ -6,7 +6,7 @@
       <el-input style="width: 200px" suffix-icon="el-icon-message" placeholder="请输入类型" class="ml-5" v-model="type"></el-input>
       <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入服务类型" class="ml-5" v-model="service"></el-input>
       <el-button class="ml-5" type="primary" @click="load" style="margin-top:10px ">搜索</el-button>
-      <el-button class="ml-5" type="warning" @click="reset">重置</el-button>
+      <el-button class="ml-5" type="primary" @click="reset">重置</el-button>
     </div>
     <div style="margin: 10px 0">
       <el-button type="primary" @click="handleadd">新增<i class="el-icon-circle-plus-outline" style="margin-left: 2px"></i></el-button>
@@ -40,7 +40,7 @@
       <el-table-column prop="message" label="备注"  align="center"></el-table-column>
       <el-table-column prop="operation" label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit" style="margin-left: 2px"></i></el-button>
+          <el-button type="primary" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit" style="margin-left: 2px"></i></el-button>
           <el-popconfirm
               class="ml-5"
               confirm-button-text='确认'

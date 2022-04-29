@@ -8,10 +8,10 @@
       <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入基站经度" class="ml-5" v-model="longitude"></el-input>
       <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入基站纬度" class="ml-5" v-model="latitude"></el-input>
       <el-button class="ml-5" type="primary" @click="load" style="margin-top:10px ">搜索</el-button>
-      <el-button class="ml-5" type="warning" @click="reset">重置</el-button>
+      <el-button class="ml-5" type="primary" @click="reset">重置</el-button>
     </div>
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="handleadd">新增<i class="el-icon-circle-plus-outline" style="margin-left: 2px"></i></el-button>
+      <el-button type="primary" @click="handleadd" icon="el-icon-circle-plus-outline">新增<i class="el-icon-circle-plus-outline" style="margin-left: 2px"></i></el-button>
       <el-popconfirm
           style="margin: 10px"
           confirm-button-text='确认'
@@ -36,10 +36,15 @@
       <el-table-column prop="longitude" label="经度"  align="center"></el-table-column>
       <el-table-column prop="latitude" label="纬度"  align="center"></el-table-column>
       <el-table-column prop="connTerminalNum" label="连接终端数量"  align="center"></el-table-column>
+      <el-table-column prop="connMecId" label="关联的MEC ID"  align="center">
+        <template slot-scope="scope">
+          mec-{{scope.row.connMecId}}
+        </template>
+      </el-table-column>
       <el-table-column prop="pci" label="PCI"  align="center"></el-table-column>
       <el-table-column prop="operation" label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit" style="margin-left: 2px"></i></el-button>
+          <el-button type="primary" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit" style="margin-left: 2px"></i></el-button>
           <el-popconfirm
               class="ml-5"
               confirm-button-text='确认'

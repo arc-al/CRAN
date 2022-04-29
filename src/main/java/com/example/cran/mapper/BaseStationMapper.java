@@ -18,6 +18,7 @@ public interface BaseStationMapper extends BaseMapper<BaseStation> {
     @Select("select max(id) from base_station")
     int getMaxid();
 
+
     @Delete("delete from base_station where 1=1")
     boolean deleteAll();
 }

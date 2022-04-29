@@ -21,9 +21,16 @@ public class MecServiceImpl extends ServiceImpl<MecMapper, Mec> implements IMecS
     @Autowired
     private MecMapper mecMapper;
 
+    @Autowired
+    private IMecService mecService;
+
     @Override
     public Integer getMaxid() {
-        return mecMapper.getMaxid();
+        if(mecService.list().size()==0){
+            return 1;
+        } else {
+            return mecMapper.getMaxid();
+        }
     }
 
     @Override

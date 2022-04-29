@@ -36,12 +36,7 @@ public class TerminalController {
     public boolean save(@RequestBody Terminal terminal){
         //@RequestBody注解的作用是将接收到的JOSN格式数据转化成User对象
         //新增或者更新
-        if(terminal.getId()==null){
-            terminal.setId(terminalService.getMaxid()+1);
-            return terminalService.save(terminal);
-        } else {
-            return terminalService.updateById(terminal);
-        }
+        return terminalService.saveData(terminal);
     }
 
     @DeleteMapping("/{id}")

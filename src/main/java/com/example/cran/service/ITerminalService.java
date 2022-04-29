@@ -15,4 +15,5 @@ public interface ITerminalService extends IService<Terminal> {
 
     Integer getMaxid();
     boolean deleteAll();
+    boolean saveData(Terminal terminal);
 }
