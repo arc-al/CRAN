@@ -1,4 +1,5 @@
 <template>
+  //map
   <div style="width: 100%">
     <el-button round @click="addBS" style="margin: 10px 10px " size="medium ">添加基站</el-button>
     <el-button round @click="addTerminal" style="margin: 10px 10px " size="medium ">添加终端</el-button>
