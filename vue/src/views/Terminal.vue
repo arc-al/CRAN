@@ -5,8 +5,6 @@
       <el-input style="width: 200px" suffix-icon="el-icon-message" placeholder="请输入终端业务类型" class="ml-5" v-model="businessType"></el-input>
       <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入经度" class="ml-5" v-model="longitude"></el-input>
       <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入经度" class="ml-5" v-model="latitude"></el-input>
-      <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入关联切片" class="ml-5" v-model="connSlicing"></el-input>
-      <el-input style="width: 200px" suffix-icon="el-icon-position" placeholder="请输入关联基站" class="ml-5" v-model="connBs"></el-input>
       <el-button class="ml-5" type="primary" @click="load" style="margin-top:10px ">搜索</el-button>
       <el-button class="ml-5" type="warning" @click="reset">重置</el-button>
     </div>
@@ -154,8 +152,6 @@ export default {
           pageSize: this.pageSize,
           id: this.id,
           businessType: this.businessType,
-          connSlicing: this.connSlicing,
-          connBs: this.connBs,
           longitude: this.longitude,
           latitude: this.latitude
         }

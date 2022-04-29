@@ -62,8 +62,9 @@
     </div>
     <hr/>
 
-
-
+    <el-descriptions title="匹配结果分析">
+      <el-descriptions-item label="匹配建议">经过需求匹配分析，建议您使用 <span style="color: crimson">{{bestSuggest}}</span> 类型的切片承载该业务，可使用的所有切片如下：</el-descriptions-item>
+    </el-descriptions>
 
     <el-table :data="matchTableData" border stripe :header-cell-class-name="headerBg" >
       <el-table-column prop="id" label="切片Id" width="80" align="center">
@@ -101,6 +102,7 @@ export default {
       radio: '',
       matchTableData: [],
       total: 0,
+      bestSuggest: '',
       selectoptions: [
         {value: 0, label: "低"},
         {value: 1, label: "中低"},
@@ -125,6 +127,8 @@ export default {
             this.matchTableData = '';
           }else{
             this.matchTableData = res[0];
+            console.log(this.matchTableData)
+            this.bestSuggest = res[1]
           }
         })
       }
@@ -145,6 +149,7 @@ export default {
         }else{
           this.$message.success("匹配完成")
           this.matchTableData = res[0];
+          this.bestSuggest = res[1]
         }
       })
     },
@@ -166,7 +171,9 @@ export default {
           this.$message.error("绑定失败")
         }
       })
-      this.load()
+      setTimeout(()=>{
+        this.load()
+      },200)
     },
   },
   created() {

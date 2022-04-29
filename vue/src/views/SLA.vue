@@ -33,7 +33,7 @@
       <el-table-column prop="eteDelay" label="端到端时延" width="150" align="center"></el-table-column>
       <el-table-column prop="resIsoLevel" label="资源隔离等级"  align="center"></el-table-column>
       <el-table-column prop="secIsoLevel" label="安全隔离等级"  align="center"></el-table-column>
-      <el-table-column prop="pirority" label="优先级"  align="center"></el-table-column>
+      <el-table-column prop="priority" label="优先级"  align="center"></el-table-column>
       <el-table-column prop="connSlicNum" label="绑定切片个数"  align="center"></el-table-column>
       <el-table-column prop="message" label="备注"  align="center"></el-table-column>
       <el-table-column prop="operation" label="操作" align="center" width="200">
@@ -162,6 +162,7 @@ export default {
         }
       }).then(res=>{
         this.tableData = res.records
+        console.log(res.records)
         this.total = res.total
       })
     },

@@ -56,5 +56,7 @@ public class BaseStation implements Serializable {
       @ApiModelProperty("是否正在使用")
       private String state;
 
+      @ApiModelProperty("连接终端数量")
+      private Integer connTerminalNum;
 
 }

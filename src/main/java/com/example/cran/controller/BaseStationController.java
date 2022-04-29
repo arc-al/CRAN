@@ -3,6 +3,8 @@ package com.example.cran.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.cran.service.IConnectionUpdateService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import javax.annotation.Resource;
@@ -23,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/base-station")
 public class BaseStationController {
+
+    @Autowired
+    private IConnectionUpdateService connectionUpdateService;
 
     @Resource
     private IBaseStationService baseStationService;
@@ -52,11 +57,13 @@ public class BaseStationController {
 
     @GetMapping
     public List<BaseStation> findAll() {
+        connectionUpdateService.bs_terminalUpdate();
         return baseStationService.list();
     }
 
     @GetMapping("/{id}")
     public BaseStation findOne(@PathVariable Integer id) {
+        connectionUpdateService.bs_terminalUpdate();
         return baseStationService.getById(id);
     }
 
@@ -68,6 +75,7 @@ public class BaseStationController {
                                       @RequestParam(defaultValue = "") String area,
                                       @RequestParam(defaultValue = "") String longitude,
                                       @RequestParam(defaultValue = "") String latitude) {
+        connectionUpdateService.bs_terminalUpdate();
         IPage<BaseStation> page = new Page<>(pageNum, pageSize);
         QueryWrapper<BaseStation> oqw = new QueryWrapper<>();
         if(!"".equals(id)){

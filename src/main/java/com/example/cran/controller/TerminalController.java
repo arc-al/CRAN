@@ -3,6 +3,8 @@ package com.example.cran.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.cran.service.IConnectionUpdateService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import javax.annotation.Resource;
@@ -23,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/terminal")
 public class TerminalController {
+
+    @Autowired
+    private IConnectionUpdateService connectionUpdateService;
 
     @Resource
     private ITerminalService terminalService;
@@ -46,11 +51,13 @@ public class TerminalController {
 
     @GetMapping
     public List<Terminal> findAll() {
+        connectionUpdateService.bs_terminalUpdate();
         return terminalService.list();
     }
 
     @GetMapping("/{id}")
     public Terminal findOne(@PathVariable Integer id) {
+        connectionUpdateService.bs_terminalUpdate();
         return terminalService.getById(id);
     }
 
@@ -60,10 +67,8 @@ public class TerminalController {
                                     @RequestParam(defaultValue = "") String id,
                                    @RequestParam(defaultValue = "") String business_type  ,
                                    @RequestParam(defaultValue = "") String longitude,
-                                   @RequestParam(defaultValue = "") String latitude,
-                                   @RequestParam(defaultValue = "") String conn_slicing,
-                                   @RequestParam(defaultValue = "") String conn_bs) {
-
+                                   @RequestParam(defaultValue = "") String latitude) {
+        connectionUpdateService.bs_terminalUpdate();
         IPage<Terminal> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Terminal> queryWrapper = new QueryWrapper<>();
         if(!"".equals(id)){
@@ -77,12 +82,6 @@ public class TerminalController {
         }
         if(!"".equals(latitude)){
             queryWrapper.like("latitude",latitude);
-        }
-        if(!"".equals(conn_slicing)){
-            queryWrapper.like("conn_slicing",conn_slicing);
-        }
-        if(!"".equals(conn_bs)){
-            queryWrapper.like("conn_bs",conn_bs);
         }
         queryWrapper.orderByAsc("id");
         return terminalService.page(page, queryWrapper);

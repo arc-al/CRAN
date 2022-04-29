@@ -25,16 +25,17 @@
       <el-button type="primary">导入文件<i class="el-icon-bottom" style="margin-left: 2px"></i></el-button>
     </div>
     <el-table :data="tableData" border stripe :header-cell-class-name="headerBg" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="id" label="基站Id" width="80" align="center">
+      <el-table-column type="selection" ></el-table-column>
+      <el-table-column prop="id" label="基站Id"  align="center">
         <template slot-scope="scope">
           gNB-{{scope.row.id}}
         </template>
       </el-table-column>
-      <el-table-column prop="type" label="基站站型" width="80" align="center"></el-table-column>
-      <el-table-column prop="area" label="基站片区" width="120" align="center"></el-table-column>
-      <el-table-column prop="longitude" label="经度" width="150" align="center"></el-table-column>
-      <el-table-column prop="latitude" label="纬度" width="150" align="center"></el-table-column>
+      <el-table-column prop="type" label="基站站型"  align="center"></el-table-column>
+      <el-table-column prop="area" label="基站片区"  align="center"></el-table-column>
+      <el-table-column prop="longitude" label="经度"  align="center"></el-table-column>
+      <el-table-column prop="latitude" label="纬度"  align="center"></el-table-column>
+      <el-table-column prop="connTerminalNum" label="连接终端数量"  align="center"></el-table-column>
       <el-table-column prop="pci" label="PCI"  align="center"></el-table-column>
       <el-table-column prop="operation" label="操作" align="center" width="200">
         <template slot-scope="scope">

@@ -5,8 +5,8 @@
       <Aside :isCollapse="isCollapse" :logoTextShow="logoTextShow"/>
     </el-aside>
 
-    <el-container>
-      <el-header width="100%" style=" border-bottom: 1px solid #ccc;" >
+    <el-container >
+      <el-header width="100%" style=" border-bottom: 1px solid #ccc;" v-show="isHeaderShow">
 <!--        <Header :collapseBtnClass="collapseBtnClass"  />-->
         <div style="font-size: 12px; line-height: 60px; display: flex;" >
           <div style="flex:1; font-size: 22px ">
@@ -41,6 +41,11 @@ export default {
       logoTextShow :true,
 
     }
+  },
+  computed:{
+    isHeaderShow(){
+      return this.$store.state.isHeaderShow
+    },
   },
   methods:{
     collapse(){

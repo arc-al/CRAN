@@ -1,9 +1,11 @@
 <template>
   <div style="width: 100%">
     <el-button round @click="addBS" style="margin: 10px 10px " size="medium ">添加基站</el-button>
+    <el-button round @click="addTerminal" style="margin: 10px 10px " size="medium ">添加终端</el-button>
     <el-button round @click="getPosition" style="margin: 10px 10px " size="medium ">查看经纬度</el-button>
     <el-button round @click="addTemplate" style="margin: 10px 10px " size="medium ">实例导入</el-button>
-    <div id="container" style="width: 100%; height: calc(88vh)"  ></div>
+    <el-divider></el-divider>
+    <div id="container" style="width: 100%; height: calc(91vh)"  ></div>
 
     <el-dialog title="实例导入" :visible.sync="dialogFormVisible" width="30%" >
       <template>
@@ -98,12 +100,16 @@ export default {
       caseNum: 0,
       dialogFormVisible: false,
       isAddBs: false,
+      isAddTerminal: false,
       map: {},
       bsObject: {},
+      terminalObject: {},
       getPos: false,
     }
   },
   async mounted() {
+    //隐藏顶栏
+    this.$store.commit('SetIsHeaderShowFalse');
     //加载地图
     var map = new BMap.Map("container");
     this.map = map;
@@ -130,7 +136,8 @@ export default {
         //此处填写你的业务逻辑即可
         if (e.keyCode == 27) {
           self.isAddBs = self.isAddBs?!self.isAddBs:self.isAddBs;
-          self.getPos = self.getPos?!self.getPos:self.isAddBs;
+          self.isAddTerminal = self.isAddTerminal?!self.isAddTerminal:self.isAddTerminal;
+          self.getPos = self.getPos?!self.getPos:self.getPos;
         }
       })
     })
@@ -197,7 +204,10 @@ export default {
     addBS(){
       this.isAddBs = !this.isAddBs;
     },
-    handleClick(e){
+    addTerminal(){
+      this.isAddTerminal = !this.isAddTerminal;
+    },
+    handleBSClick(e){
       this.map.addOverlay(this.addPoints("",e.point.lng, e.point.lat,baseStation,"base-station"));
       this.bsObject.longitude=e.point.lng;
       this.bsObject.latitude=e.point.lat;
@@ -206,6 +216,18 @@ export default {
           this.$message.success("添加基站成功！")
         } else {
           this.$message.error("添加基站失败！")
+        }
+      })
+    },
+    handleTerminalClick(e){
+      this.map.addOverlay(this.addPoints("",e.point.lng, e.point.lat,terminal,"terminal"));
+      this.terminalObject.longitude=e.point.lng;
+      this.terminalObject.latitude=e.point.lat;
+      this.request.post("terminal", this.terminalObject).then(res=>{
+        if(res){
+          this.$message.success("添加终端成功！")
+        } else {
+          this.$message.error("添加终端失败！")
         }
       })
     },
@@ -257,10 +279,21 @@ export default {
     'isAddBs':{
       handler: function (val) {
         if(val){
-          this.map.addEventListener('click', this.handleClick);
+          this.map.addEventListener('click', this.handleBSClick);
           this.map.setDefaultCursor("crosshair");
         } else {
-          this.map.removeEventListener('click', this.handleClick);
+          this.map.removeEventListener('click', this.handleBSClick);
+          this.map.setDefaultCursor("pointer");
+        }
+      },
+    },
+    'isAddTerminal':{
+      handler: function (val) {
+        if(val){
+          this.map.addEventListener('click', this.handleTerminalClick);
+          this.map.setDefaultCursor("crosshair");
+        } else {
+          this.map.removeEventListener('click', this.handleTerminalClick);
           this.map.setDefaultCursor("pointer");
         }
       },
@@ -285,6 +318,11 @@ export default {
         }
       }
     }
+  },
+  beforeRouteLeave(to, from, next){
+    //显示顶栏
+    this.$store.commit('SetIsHeaderShowTrue');
+    next()
   }
 }
 </script>
@@ -299,5 +337,7 @@ export default {
 /deep/.anchorBL{
   display:none;
 }
-
+.el-divider--horizontal{
+  margin: 7px 0
+}
 </style>

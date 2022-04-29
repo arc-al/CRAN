@@ -8,10 +8,19 @@ Vue.use(Vuex);
 const actions = {}
 
 //准备mutations——用于操作数据
-const mutations = {}
+const mutations = {
+    SetIsHeaderShowTrue(state){
+        state.isHeaderShow=true
+    },
+    SetIsHeaderShowFalse(state){
+        state.isHeaderShow=false
+    }
+}
 
 //准备state——用于存储数据
-const state = {}
+const state = {
+    isHeaderShow: true,
+}
 
 //计算属性
 const getters = {

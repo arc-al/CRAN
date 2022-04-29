@@ -95,7 +95,7 @@ public class SlaServiceImpl extends ServiceImpl<SlaMapper, Sla> implements ISlaS
         int minMatchNum = 100;
         int[] index = new int[slaTotal.size()+1];
         int j=0; //用于index列表增加元素的自增指针
-        int bestIndex = -1;
+        Integer bestSlaId = -1;
         for(int i=0;i<slaTotal.size();i++){
             Map<String,Integer> map = slaTotal.get(i);
             int matchNum = 0;
@@ -114,9 +114,15 @@ public class SlaServiceImpl extends ServiceImpl<SlaMapper, Sla> implements ISlaS
                 index[j++] = map.get("id");
                 if(minMatchNum>matchNum){
                     minMatchNum=matchNum;
-                    bestIndex = map.get("id");
+                    bestSlaId = map.get("id");
                 }
-
+            }
+        }
+        String bestSLAType = "";
+        //获取最佳匹配的SLA的类型
+        for(Slicing sc:slicingTotal){
+            if(sc.getId() == bestSlaId){
+                bestSLAType = sc.getType();
             }
         }
 
@@ -130,7 +136,7 @@ public class SlaServiceImpl extends ServiceImpl<SlaMapper, Sla> implements ISlaS
         }
         List<Object> result = new ArrayList<>();
         result.add(matchSlicing);
-        result.add(bestIndex);
+        result.add(bestSLAType);
         return result;
     }
 

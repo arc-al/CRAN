@@ -69,6 +69,7 @@ public class CaseSetServiceImpl implements ICaseSetService {
         boolean flagTerminal = terminalDelete&&terminalSave;
 
         return flagTerminal&&flagBs;
+//        return true;
     }
 
     @Override
