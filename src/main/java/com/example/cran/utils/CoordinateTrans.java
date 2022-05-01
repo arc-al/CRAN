@@ -7,8 +7,8 @@ package com.example.cran.utils;
  */
 public class CoordinateTrans {
     //原点坐标,当前坐标是郑州光合大厦十字路口精确经纬
-    public static final double ORIGIN_X=113.627181;
-    public static final double ORIGIN_Y=34.748906;
+    public static final double ORIGIN_X=113.603897;
+    public static final double ORIGIN_Y=34.768938;
 
     //相对原点的偏移（从数据库中读出来的X要先除以X的偏移值再加上原点的X坐标，Y也一样）
 	public static final double OFFSET_X=12743.518382;

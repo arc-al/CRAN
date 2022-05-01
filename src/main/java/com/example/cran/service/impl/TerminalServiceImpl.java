@@ -43,6 +43,7 @@ public class TerminalServiceImpl extends ServiceImpl<TerminalMapper, Terminal> i
     public boolean saveData(Terminal terminal) {
         terminal.setX(CoordinateTrans.longitudeToX(terminal.getLongitude()));
         terminal.setY(CoordinateTrans.latitudeToY(terminal.getLatitude()));
+        terminal.setZ(150.0);
         if(terminal.getId()==null){
             terminal.setId(terminalService.getMaxid()+1);
             return terminalService.save(terminal);

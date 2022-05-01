@@ -161,6 +161,7 @@ public class BaseStationServiceImpl extends ServiceImpl<BaseStationMapper, BaseS
     public boolean saveData(BaseStation baseStation) {
         baseStation.setX(CoordinateTrans.longitudeToX(baseStation.getLongitude()));
         baseStation.setY(CoordinateTrans.latitudeToY(baseStation.getLatitude()));
+        baseStation.setZ(150.0);
         if(baseStation.getId()==null){
             baseStation.setId(baseStationService.getMaxid()+1);
             return baseStationService.save(baseStation);

@@ -54,6 +54,7 @@ public class CaseSetServiceImpl implements ICaseSetService {
             BaseStation baseStation = (BaseStation) bs;
             baseStation.setX(CoordinateTrans.longitudeToX(baseStation.getLongitude()));
             baseStation.setY(CoordinateTrans.latitudeToY(baseStation.getLatitude()));
+            baseStation.setZ(150.0);
             bsSave=baseStationService.save(baseStation);
             if(!bsSave) break;
         }
@@ -70,6 +71,7 @@ public class CaseSetServiceImpl implements ICaseSetService {
             Terminal terminal = (Terminal) tm;
             terminal.setX(CoordinateTrans.longitudeToX(terminal.getLongitude()));
             terminal.setY(CoordinateTrans.latitudeToY(terminal.getLatitude()));
+            terminal.setZ(150.0);
             terminalSave = terminalService.save(terminal);
             if(!terminalSave) break;
         }
