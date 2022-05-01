@@ -277,6 +277,7 @@ export default {
           this.map.removeOverlay(item)
         }
       })
+      this.clickCount=0;//清零点击事件计数
       //记录区域边缘
       var latExtent = [this.longitude[0], this.longitude[1]];
       var lngExtent = [this.latitude[1],this.latitude[0]];
