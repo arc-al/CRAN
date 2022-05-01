@@ -5,7 +5,6 @@
     <el-button round @click="getPosition" style="margin: 10px 10px " size="medium ">查看经纬度</el-button>
     <el-button round @click="addTemplate" style="margin: 10px 10px " size="medium ">实例导入</el-button>
     <el-button round @click="getCover" style="margin: 10px 10px " size="medium ">添加覆盖</el-button>
-    <el-button round @click="printCover" style="margin: 10px 10px " size="medium ">绘制边缘</el-button>
     <el-button round @click="postCover" style="margin: 10px 10px " size="medium ">提交覆盖</el-button>
     <el-button round @click="clearcover" style="margin: 10px 10px " size="medium ">清空覆盖</el-button>
     <el-divider></el-divider>
@@ -121,6 +120,7 @@ export default {
       latitudeUnit:0,//覆盖格子最小单位
       longitudeUnit:0,
       getPos: false,
+      clickCount: 0,
       chart,
     }
   },
@@ -251,17 +251,6 @@ export default {
     getCover(){
       this.isCover=!this.isCover;
     },
-    printCover(){
-      var polygon = new BMap.Polygon([
-        new BMap.Point(this.longitude[0],this.latitude[0]),
-        new BMap.Point(this.longitude[0],this.latitude[1]),
-        new BMap.Point(this.longitude[1],this.latitude[1]),
-        new BMap.Point(this.longitude[1],this.latitude[0]),
-      ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});   //创建折线
-      polygon.name = 'line'
-      this.map.addOverlay(polygon);   //增加折线
-      console.log(this.longitude);
-    },
     async postCover(){
       await this.request.get("base-station/cover",{
         params:{
@@ -291,7 +280,6 @@ export default {
       //记录区域边缘
       var latExtent = [this.longitude[0], this.longitude[1]];
       var lngExtent = [this.latitude[1],this.latitude[0]];
-      console.log(latExtent,lngExtent)
       //清空数组
       this.longitude.length=0;
       this.latitude.length=0;
@@ -408,7 +396,6 @@ export default {
         }
       };
       this.chart.setOption(option);
-
     },
     clearcover(){
       if(!this.chart.isDisposed()){
@@ -443,7 +430,7 @@ export default {
     handleClickPosCover(e){
       this.longitude.push(e.point.lng);
       this.latitude.push(e.point.lat);
-
+      this.clickCount++;
     },
     getPosition(){
       this.getPos = !this.getPos;
@@ -536,11 +523,30 @@ export default {
       handler: function (val) {
         if(val){
           this.map.addEventListener('click', this.handleClickPosCover);
+          this.map.setDefaultCursor("crosshair");
         } else {
           this.map.removeEventListener('click', this.handleClickPosCover);
+          this.map.setDefaultCursor("pointer");
         }
       },
     },
+    "clickCount":{
+      handler: function(val){
+        if(val==2){
+          this.map.removeEventListener('click', this.handleClickPosCover);
+          this.map.setDefaultCursor("pointer");
+          var polygon = new BMap.Polygon([
+            new BMap.Point(this.longitude[0],this.latitude[0]),
+            new BMap.Point(this.longitude[0],this.latitude[1]),
+            new BMap.Point(this.longitude[1],this.latitude[1]),
+            new BMap.Point(this.longitude[1],this.latitude[0]),
+          ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});   //创建折线
+          polygon.name = 'line'
+          this.map.addOverlay(polygon);   //增加折线
+        }
+
+      }
+    }
   },
   beforeRouteLeave(to, from, next){
     //显示顶栏

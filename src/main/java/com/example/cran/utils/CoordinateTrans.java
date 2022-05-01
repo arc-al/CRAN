@@ -6,7 +6,7 @@ package com.example.cran.utils;
  *
  */
 public class CoordinateTrans {
-    //原点坐标,当前坐标是郑州光合大厦十字路口精确经纬
+    //原点坐标
     public static final double ORIGIN_X=113.603897;
     public static final double ORIGIN_Y=34.768938;
 
