@@ -27,7 +27,7 @@ public class CodeGenerate {
                     builder.entityBuilder().enableLombok();
                     builder.controllerBuilder().controllerBuilder().enableHyphenStyle()
                             .enableRestStyle();  // 开启生成@RestController 控制器
-                    builder.addInclude("typical_business"); // 设置需要生成的表名
+                    builder.addInclude("totalthroughput"); // 设置需要生成的表名
                 }).execute();
     }
 }
